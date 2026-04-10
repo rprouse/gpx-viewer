@@ -137,7 +137,11 @@ function haversine([lon1, lat1], [lon2, lat2]) {
 function computeStats(points) {
   let dist = 0, gain = 0, loss = 0;
   let elevs = points.map(p => p[2]);
-  let maxE = Math.max(...elevs), minE = Math.min(...elevs);
+  let maxE = -Infinity, minE = Infinity;
+  for (const e of elevs) {
+    if (e > maxE) maxE = e;
+    if (e < minE) minE = e;
+  }
 
   for (let i = 1; i < points.length; i++) {
     dist += haversine(points[i-1], points[i]);
@@ -176,8 +180,11 @@ function drawElevation(elevs) {
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
 
-  const minE = Math.min(...elevs);
-  const maxE = Math.max(...elevs);
+  let minE = Infinity, maxE = -Infinity;
+  for (const e of elevs) {
+    if (e > maxE) maxE = e;
+    if (e < minE) minE = e;
+  }
   const range = maxE - minE || 1;
   const n = elevs.length;
 
@@ -276,10 +283,15 @@ function renderTrack() {
 }
 
 function fitTrack(coords) {
-  const lons = coords.map(c => c[0]);
-  const lats = coords.map(c => c[1]);
+  let minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
+  for (const c of coords) {
+    if (c[0] < minLon) minLon = c[0];
+    if (c[0] > maxLon) maxLon = c[0];
+    if (c[1] < minLat) minLat = c[1];
+    if (c[1] > maxLat) maxLat = c[1];
+  }
   map.fitBounds(
-    [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]],
+    [[minLon, minLat], [maxLon, maxLat]],
     { padding: 80, duration: 1200, pitch: terrain3d ? 55 : 0 }
   );
 }
