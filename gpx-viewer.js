@@ -354,7 +354,7 @@ document.body.addEventListener('drop', e => {
   e.preventDefault();
   document.body.classList.remove('drag-active');
   const file = e.dataTransfer.files[0];
-  if (file && file.name.endsWith('.gpx')) {
+  if (file && file.name.toLowerCase().endsWith('.gpx')) {
     const reader = new FileReader();
     reader.onload = ev => loadGPX(ev.target.result);
     reader.readAsText(file);
