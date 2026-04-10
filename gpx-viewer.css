@@ -61,7 +61,7 @@ header {
   align-items: center;
   justify-content: center;
   background: rgba(10, 12, 15, 0.82);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
   transition: opacity 0.4s ease;
 }
 

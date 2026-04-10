@@ -24,8 +24,8 @@ function initMap() {
   map = new maplibregl.Map({
     container: 'map',
     style: buildStyle(apiKey),
-    center: [0, 20],
-    zoom: 2,
+    center: [-115.06, 49.50],
+    zoom: 8,
     pitch: 0,
     bearing: 0,
     antialias: true
