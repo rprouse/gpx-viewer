@@ -409,6 +409,20 @@ document.getElementById('btn-apply-key').addEventListener('click', () => {
 });
 
 // ─────────────────────────────────────────────
+// RESIZE HANDLING
+// ─────────────────────────────────────────────
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (trackData) {
+      const stats = computeStats(trackData.points);
+      drawElevation(stats.elevs);
+    }
+  }, 200);
+});
+
+// ─────────────────────────────────────────────
 // BOOT
 // ─────────────────────────────────────────────
 initMap();
