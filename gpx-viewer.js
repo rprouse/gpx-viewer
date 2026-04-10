@@ -4,6 +4,7 @@
 let map;
 let trackData = null;
 let terrain3d = false;
+let markers = [];
 let apiKey = localStorage.getItem('maptiler_key') || '';
 
 // ─────────────────────────────────────────────
@@ -269,14 +270,18 @@ function renderTrack() {
     paint: { 'line-color': '#f06030', 'line-width': 2.5, 'line-opacity': 0.95 }
   });
 
+  // Remove existing markers
+  markers.forEach(m => m.remove());
+  markers = [];
+
   // Start/end markers
   const startEl = document.createElement('div');
   startEl.style.cssText = 'width:10px;height:10px;border-radius:50%;background:#1a6b4a;border:2px solid #f2ede6;box-shadow:0 0 8px rgba(26,107,74,0.8)';
-  new maplibregl.Marker({ element: startEl }).setLngLat(coords2d[0]).addTo(map);
+  markers.push(new maplibregl.Marker({ element: startEl }).setLngLat(coords2d[0]).addTo(map));
 
   const endEl = document.createElement('div');
   endEl.style.cssText = 'width:10px;height:10px;border-radius:50%;background:#d4500a;border:2px solid #f2ede6;box-shadow:0 0 8px rgba(212,80,10,0.8)';
-  new maplibregl.Marker({ element: endEl }).setLngLat(coords2d[coords2d.length - 1]).addTo(map);
+  markers.push(new maplibregl.Marker({ element: endEl }).setLngLat(coords2d[coords2d.length - 1]).addTo(map));
 
   // Fit bounds
   fitTrack(coords2d);
@@ -375,8 +380,8 @@ document.getElementById('btn-reset').addEventListener('click', () => {
     if (map.getLayer(id)) map.removeLayer(id);
   });
   if (map.getSource('gpx-line')) map.removeSource('gpx-line');
-  // Remove markers
-  document.querySelectorAll('.maplibregl-marker').forEach(m => m.remove());
+  markers.forEach(m => m.remove());
+  markers = [];
   document.getElementById('file-input').value = '';
 });
 
