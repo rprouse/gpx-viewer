@@ -4,7 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A zero-dependency, no-build-step GPX track viewer. Two files: `gpx-viewer.html` (all JS inline) and `gpx-viewer.css`. Open `gpx-viewer.html` directly in a browser — no server, no npm, no compilation.
+A zero-dependency, no-build-step GPX track viewer. Three files: `gpx-viewer.html`, `gpx-viewer.js`, and `gpx-viewer.css`. Open `gpx-viewer.html` directly in a browser — no server, no npm, no compilation.
+
+## Quick Start
+
+Open `gpx-viewer.html` in any modern browser. No local server needed.
+Get a free MapTiler API key at maptiler.com for outdoor map style and 3D terrain (optional).
 
 ## Architecture
 
@@ -12,7 +17,7 @@ A zero-dependency, no-build-step GPX track viewer. Two files: `gpx-viewer.html` 
 - MapLibre GL JS 4.7.1 — map rendering
 - Fonts: Bebas Neue (display headings), DM Mono (UI mono)
 
-**Global state in `gpx-viewer.html`:**
+**Global state in `gpx-viewer.js`:**
 - `map` — the MapLibre map instance
 - `trackData` — `{ name, points }` where points are `[lon, lat, ele]` triples
 - `terrain3d` — boolean toggle for 3D terrain mode
@@ -30,6 +35,8 @@ A zero-dependency, no-build-step GPX track viewer. Two files: `gpx-viewer.html` 
 5. `drawElevation()` renders an HTML Canvas elevation profile chart
 
 **UI panels** use CSS `opacity`/`transform` transitions toggled by `.visible` / `.hidden` classes — no JS animation libraries.
+
+**Script placement:** `<script src="gpx-viewer.js">` is at the end of `<body>`. All event listeners query the DOM immediately on load — moving the tag to `<head>` requires wrapping in `DOMContentLoaded`.
 
 ## CSS Design Tokens
 
