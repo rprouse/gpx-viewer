@@ -173,7 +173,8 @@ function showStats(name, stats) {
 // ─────────────────────────────────────────────
 // ELEVATION CHART
 // ─────────────────────────────────────────────
-function drawElevation(elevs) {
+function drawElevation(stats) {
+  const { elevs, minE, maxE } = stats;
   const canvas = document.getElementById('elev-canvas');
   const panel = document.getElementById('elev-panel');
   const dpr = window.devicePixelRatio || 1;
@@ -186,11 +187,6 @@ function drawElevation(elevs) {
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
 
-  let minE = Infinity, maxE = -Infinity;
-  for (const e of elevs) {
-    if (e > maxE) maxE = e;
-    if (e < minE) minE = e;
-  }
   const range = maxE - minE || 1;
   const n = elevs.length;
 
@@ -321,7 +317,7 @@ function loadGPX(text) {
 
   document.getElementById('drop-overlay').classList.add('hidden');
   showStats(parsed.name, stats);
-  drawElevation(stats.elevs);
+  drawElevation(stats);
 
   if (map.isStyleLoaded()) {
     renderTrack();
@@ -417,7 +413,7 @@ window.addEventListener('resize', () => {
   resizeTimer = setTimeout(() => {
     if (trackData) {
       const stats = computeStats(trackData.points);
-      drawElevation(stats.elevs);
+      drawElevation(stats);
     }
   }, 200);
 });
