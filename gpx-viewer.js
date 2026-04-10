@@ -81,6 +81,11 @@ function parseGPX(xmlStr) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlStr, 'application/xml');
 
+  if (doc.querySelector('parsererror')) {
+    alert('This file is not valid XML.');
+    return { name: '', points: [] };
+  }
+
   const name =
     doc.querySelector('trk > name')?.textContent ||
     doc.querySelector('rte > name')?.textContent ||
