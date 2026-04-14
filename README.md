@@ -10,6 +10,7 @@ A zero-dependency, no-build-step GPX track viewer that runs entirely in the brow
 - **Elevation profile** — canvas-rendered elevation chart with gradient fill
 - **Track statistics** — distance, elevation gain/loss, max/min elevation, point count
 - **Start/end markers** — green start and orange end markers on the track
+- **URL parameter loading** — link directly to a GPX file via `?gpx=path/to/file.gpx`
 - **No server required** — open the HTML file directly in any modern browser
 
 ## Quick Start
@@ -17,6 +18,16 @@ A zero-dependency, no-build-step GPX track viewer that runs entirely in the brow
 1. Open `gpx-viewer.html` in a modern browser — no server, no npm, no compilation needed.
 2. Drop a `.gpx` file onto the page, or click **Browse files**.
 3. The track renders on the map with stats and an elevation profile.
+
+### Loading a GPX File via URL
+
+You can link directly to a GPX file by adding a `gpx` query parameter:
+
+```
+gpx-viewer.html?gpx=tracks/my-hike.gpx
+```
+
+The path is resolved relative to the HTML file. When a `gpx` parameter is provided, the drop overlay and "Load New" button are hidden — the viewer acts as a dedicated display for that track. This requires serving the files from a web server (see [Development](#development)).
 
 ### Optional: MapTiler API Key
 
@@ -64,6 +75,7 @@ The app uses a small set of module-level variables in `gpx-viewer.js`:
 - `trackData` — `{ name, points }` where points are `[lon, lat, ele]` triples
 - `terrain3d` — boolean toggle for 3D terrain mode
 - `apiKey` — MapTiler key, persisted in `localStorage`
+- `gpxParam` — value of the `?gpx=` URL parameter (if provided)
 
 ## Development
 

@@ -6,6 +6,7 @@ let trackData = null;
 let terrain3d = false;
 let markers = [];
 let apiKey = localStorage.getItem('maptiler_key') || '';
+const gpxParam = new URLSearchParams(window.location.search).get('gpx');
 
 // ─────────────────────────────────────────────
 // MAP INIT
@@ -343,7 +344,7 @@ document.getElementById('file-input').addEventListener('change', e => {
 document.body.addEventListener('dragover', e => {
   e.preventDefault();
   document.body.classList.add('drag-active');
-  document.getElementById('drop-overlay').classList.remove('hidden');
+  if (!gpxParam) document.getElementById('drop-overlay').classList.remove('hidden');
 });
 
 document.body.addEventListener('dragleave', e => {
@@ -421,6 +422,23 @@ window.addEventListener('resize', () => {
 // ─────────────────────────────────────────────
 // BOOT
 // ─────────────────────────────────────────────
+if (gpxParam) {
+  // Hide the drop overlay immediately and remove the "Load New" button
+  document.getElementById('drop-overlay').classList.add('hidden');
+  document.getElementById('btn-reset').style.display = 'none';
+
+  fetch(gpxParam)
+    .then(res => {
+      if (!res.ok) throw new Error(`Failed to load ${gpxParam}: ${res.status}`);
+      return res.text();
+    })
+    .then(text => loadGPX(text))
+    .catch(err => {
+      alert(err.message);
+      document.getElementById('drop-overlay').classList.remove('hidden');
+    });
+}
+
 initMap();
 
 // Pre-fill API key input if stored
